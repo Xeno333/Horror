@@ -174,7 +174,7 @@ function spook()
 
                 core.sound_play({name = "the_entity_attack", gain = 2}, {pos = pos, max_hear_distance = 32}, true)
 
-            elseif num <= 7 then
+            elseif num <= 8 then
                 local id = player:hud_add({
                     type = "image",
                     text = "particle_1.png",
