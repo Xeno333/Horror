@@ -75,14 +75,15 @@ core.register_entity("horror:the_entity", {
             local vel = player_pos - pos
             local dist = math.sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z)
 
-            if dist > 1 then
-                vel.x = math.min(math.max(vel.x, -1), 1) * 16
-                vel.z = math.min(math.max(vel.z, -1), 1) * 16
-                vel.y = math.min(math.max(vel.y, -1), 1) * 16
+            if dist > 0.5 and not self.attacking then
+                local ratio = math.max(vel.x, vel.y, vel.z)
+                vel.x = (vel.x / ratio) * 16
+                vel.y = (vel.y / ratio) * 16
+                vel.z = (vel.z / ratio) * 16
 
                 self.object:set_velocity(vel)
             else
-                self.spawned = false
+                self.attacking = true
                 
                 local player_lighting = player:get_lighting()
                 local exposure = player_lighting.exposure.exposure_correction
