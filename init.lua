@@ -76,7 +76,7 @@ core.register_entity("horror:the_entity", {
             local dist = math.sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z)
 
             if dist > 0.5 and not self.attacking then
-                local ratio = math.max(vel.x, vel.y, vel.z)
+                local ratio = math.abs(math.max(vel.x, vel.y, vel.z))
                 vel.x = (vel.x / ratio) * 16
                 vel.y = (vel.y / ratio) * 16
                 vel.z = (vel.z / ratio) * 16
