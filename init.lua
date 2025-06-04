@@ -152,7 +152,6 @@ function spook()
                 core.add_entity(pos, "horror:the_entity")
 
             elseif num < 5 then
-                print("A")
                 core.add_particlespawner({
                     amount = 64,
                     time = 6,
