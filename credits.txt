@@ -1,0 +1,3 @@
+Code - Xeno333/Xeno333
+Textures - Lone_Star_Miner
+Sounds TX_Miner/Xeno333, Lone_Star_Miner, 44mag, TX_Warrior
