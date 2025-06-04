@@ -148,10 +148,11 @@ function spook()
             local pos = vector.new(math.random(-16, 16)+player_pos.x, math.random(-4, 16)+player_pos.y, math.random(-16, 16)+player_pos.z)
 
             local num = math.random(1, 20)
-            if num == 1 then
+
+            if num < 3 then
                 core.add_entity(pos, "horror:the_entity")
 
-            elseif num < 5 then
+            elseif num <= 5 then
                 core.add_particlespawner({
                     amount = 64,
                     time = 6,
@@ -173,6 +174,20 @@ function spook()
 
                 core.sound_play({name = "the_entity_attack", gain = 2}, {pos = pos, max_hear_distance = 32}, true)
 
+            elseif num <= 7 then
+                local id = player:hud_add({
+                    type = "image",
+                    text = "particle_1.png",
+                    scale = {x = 256, y = 256},
+                    alignment = {x = 0.5, y = 0.4}
+                })
+                core.sound_play({name = "the_entity_attack", gain = 2}, {pos = player_pos, max_hear_distance = 32}, true)
+                core.after(0.1, function()
+                    if player:is_valid() then
+                        player:hud_remove(id)
+                    end
+                end)
+
             else
                 local spook_selected = spooks[math.random(1, #spooks)]
                 local sound = spook_selected.sound
@@ -181,11 +196,11 @@ function spook()
             end
         end
 
-        core.after(10, spook)
+        core.after(5*math.random(1, 5), spook)
 
     else
         core.after(60, spook)
     end
 end
 
-core.after(10, spook)
+core.after(1, spook)
