@@ -22,17 +22,16 @@ local spook_mobs = {
     "horror:reaper"
 }
 
+local players_to_spook = {}
 
 function spook()
-    local time = core.get_timeofday()
+    for _, name in pairs(players_to_spook) do
+        local num = math.random(1, 60)
 
-    if time <= 0.2 or time >= 0.8 then
-        local connected = core.get_connected_players()
-        for _, player in pairs(connected) do
+        if num <= 20 then
+            local player = core.get_player_by_name(name)
             local player_pos = player:get_pos()
             local pos = vector.new(math.random(-16, 16)+player_pos.x, math.random(-4, 16)+player_pos.y, math.random(-16, 16)+player_pos.z)
-
-            local num = math.random(1, 20)
 
             if num < 3 then
                 core.add_entity(pos, spook_mobs[math.random(1, #spook_mobs)])
@@ -80,12 +79,22 @@ function spook()
                 core.sound_play(sound, {pos = pos, max_hear_distance = 32}, true)
             end
         end
-
-        core.after(5*math.random(1, 5), spook)
-
-    else
-        core.after(60, spook)
     end
+
+    core.after(5, spook)
 end
 
-core.after(1, spook)
+core.after(5, spook)
+
+core.register_globalstep(function(dtime)
+    local connected = core.get_connected_players()
+    local time = core.get_timeofday()
+
+    players_to_spook = {}
+
+    for _, player in pairs(connected) do
+        if core.get_node(player:get_pos()).param1 < 2 or (time <= 0.2 or time >= 0.8) then
+            players_to_spook[#players_to_spook] = player:get_player_name()
+        end
+    end
+end)
