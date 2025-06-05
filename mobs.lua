@@ -207,10 +207,13 @@ core.register_entity("horror:chaser", {
 
         core.after(4 * math.random(1, 4), function()
             if self.object:is_valid() then
+                self.attacking = true
+                self.object:set_velocity(vector.new(0, 0, 0))
+
                 core.sound_play({name = "horror_the_entity_attack", gain = 2, pitch = 0.5}, {pos = self.object:get_pos(), max_hear_distance = 64}, true)
                 core.after(0.25, function()
                     if self.object:is_valid() then
-                        self.object:set_pos(player:get_pos() + player:get_look_dir() + vector.new(0, 1, 0))
+                        self.object:set_pos(player:get_pos() + player:get_look_dir())
                     end
                 end)
                 core.after(1, function()
@@ -222,32 +225,34 @@ core.register_entity("horror:chaser", {
         end)
     end,
     on_step = function(self, dtime, moveresult)
-        local player = core.get_player_by_name(self.player)
-        if not player then
-            self.object:remove()
-            return
-        end
+        if not self.attacking then
+            local player = core.get_player_by_name(self.player)
+            if not player then
+                self.object:remove()
+                return
+            end
 
-        if not self.whistled and math.random(1, 2) == 1 then
-            core.sound_play({name = "horror_whistle_2", gain = 4, pitch = 2}, {pos = self.object:get_pos(), max_hear_distance = 64}, true)
-            self.whistled = true
-        end
+            if not self.whistled and math.random(1, 2) == 1 then
+                core.sound_play({name = "horror_whistle_2", gain = 4, pitch = 2}, {pos = self.object:get_pos(), max_hear_distance = 64}, true)
+                self.whistled = true
+            end
 
-        local player_pos = player:get_pos() + player:get_look_dir()
-        local pos = self.object:get_pos()
+            local player_pos = player:get_pos() + player:get_look_dir()
+            local pos = self.object:get_pos()
 
-        local vel = player_pos - pos
-        local dist = math.sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z)
+            local vel = player_pos - pos
+            local dist = math.sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z)
 
-        if dist > 10 then
-            local ratio = math.abs(math.max(vel.x, vel.y, vel.z))
-            vel.x = (vel.x / ratio) * 4
-            vel.y = -9
-            vel.z = (vel.z / ratio) * 4
+            if dist > 10 then
+                local ratio = math.abs(math.max(vel.x, vel.y, vel.z))
+                vel.x = (vel.x / ratio) * 4
+                vel.y = -9
+                vel.z = (vel.z / ratio) * 4
 
-            self.object:set_velocity(vel)
-        else
-            self.object:set_velocity(vector.new(0, -9, 0))
+                self.object:set_velocity(vel)
+            else
+                self.object:set_velocity(vector.new(0, -9, 0))
+            end
         end
     end,
     on_deactivate = function(self, removal)
@@ -312,7 +317,7 @@ core.register_entity("horror:reaper", {
 
                     core.after(0.25, function()
                         if self.object:is_valid() then
-                            self.object:set_pos(player:get_pos() + player:get_look_dir() + vector.new(0, 1, 0))
+                            self.object:set_pos(player:get_pos() + player:get_look_dir())
                         end
                     end)
                     core.after(1, function()
