@@ -87,14 +87,13 @@ end
 core.after(5, spook)
 
 core.register_globalstep(function(dtime)
-    local connected = core.get_connected_players()
     local time = core.get_timeofday()
 
     players_to_spook = {}
 
-    for _, player in pairs(connected) do
+    for _, player in pairs(core.get_connected_players()) do
         if core.get_node(player:get_pos()).param1 < 2 or (time <= 0.2 or time >= 0.8) then
-            players_to_spook[#players_to_spook] = player:get_player_name()
+            players_to_spook[#players_to_spook+1] = player:get_player_name()
         end
     end
 end)
