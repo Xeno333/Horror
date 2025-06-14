@@ -111,13 +111,8 @@ core.register_entity("horror:the_entity", {
             local dist = math.sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z)
 
             if dist > 1 and not self.attacking then
-                local ratio = math.abs(math.max(vel.x, vel.y, vel.z))
-
-                vel.x = (vel.x / ratio) * 10
-                vel.y = (vel.y / ratio) * 10
-                vel.z = (vel.z / ratio) * 10
-
-                self.object:set_velocity(vel)
+                local v = vector.new(vel.x / dist, vel.y / dist, vel.z / dist)
+                self.object:set_velocity(v * 16)
             else
                 self.attacking = true
                 
@@ -244,12 +239,8 @@ core.register_entity("horror:chaser", {
             local dist = math.sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z)
 
             if dist > 10 then
-                local ratio = math.abs(math.max(vel.x, vel.y, vel.z))
-                vel.x = (vel.x / ratio) * 4
-                vel.y = -9
-                vel.z = (vel.z / ratio) * 4
-
-                self.object:set_velocity(vel)
+                local v = vector.new(vel.x / dist, vel.y / dist, vel.z / dist)
+                self.object:set_velocity(v * 4)
             else
                 self.object:set_velocity(vector.new(0, -9, 0))
             end
@@ -347,12 +338,8 @@ core.register_entity("horror:reaper", {
         local dist = math.sqrt(vel.x*vel.x + vel.y*vel.y + vel.z*vel.z)
 
         if dist > 16 then
-            local ratio = math.abs(math.max(vel.x, vel.y, vel.z))
-            vel.x = (vel.x / ratio) * 4
-            vel.y = (vel.y / ratio) * 4
-            vel.z = (vel.z / ratio) * 4
-
-            self.object:set_velocity(vel)
+            local v = vector.new(vel.x / dist, vel.y / dist, vel.z / dist)
+            self.object:set_velocity(v * 4)
         else
             self.object:set_velocity(vector.new(0, 0, 0))
         end
